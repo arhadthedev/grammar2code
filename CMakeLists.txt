@@ -6,6 +6,7 @@
 # file LICENSE.txt or <https://www.opensource.org/licenses/mit-license.php>.
 
 # cxx_std_17 in CMAKE_CXX_KNOWN_FEATURES was introduced in 3.8
+# install(FILES TYPE <type>) was introduced in 3.14
 #
 # New versions of C++ remove unsafe practices from the standard library, so
 # force the latest version available. "cxx_std_*" means "at least C++ xxx".
@@ -13,7 +14,7 @@
 # Features removed in C++14: <https://isocpp.org/files/papers/p1319r0.html>.
 # Features removed in C++17: <https://isocpp.org/files/papers/p0636r0.html>.
 # Features removed in C++20: <http://open-std.org/JTC1/SC22/WG21/docs/papers/2020/p2131r0.html>.
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 
 ##################################################
@@ -26,6 +27,15 @@ file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg.json" MANIFEST ENCODING UTF-8)
 string(REGEX MATCH "[0-9]+\.[0-9.]+" BUILD_VERSION ${MANIFEST})
 
 project(grammar2code VERSION ${BUILD_VERSION} LANGUAGES CXX)
+
+
+##################################################
+#
+# Files managed unprocessed
+#
+##################################################
+
+install(FILES LICENSE.txt README.md TYPE DOC)
 
 
 ##################################################
