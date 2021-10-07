@@ -1,0 +1,8 @@
+{
+  "name": "grammar2code",
+  "version": "0.1.0",
+  "description": "Generator of direct code scannerless parsers",
+  "license": "MIT",
+  "dependencies": [
+  ]
+}
