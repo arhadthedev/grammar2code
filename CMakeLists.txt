@@ -31,6 +31,15 @@ project(grammar2code VERSION ${BUILD_VERSION} LANGUAGES CXX)
 
 ##################################################
 #
+# Package dependencies
+#
+##################################################
+
+find_package(GTest CONFIG)
+
+
+##################################################
+#
 # Files managed unprocessed
 #
 ##################################################
@@ -59,3 +68,18 @@ add_custom_target(version_info
                                -DGRAMMAR2CODE_BUILD_VERSION="${BUILD_VERSION}"
                                -P "${TOOLS}/update_version.cmake"
     BYPRODUCTS version.h)
+
+
+##################################################
+#
+# Targets
+#
+##################################################
+
+if(GTest_FOUND)
+    add_executable(unit_tests EXCLUDE_FROM_ALL tests/unit/always_pass.cpp)
+    target_compile_features(unit_tests PRIVATE cxx_std_17)
+    target_link_libraries(unit_tests PRIVATE GTest::gtest GTest::gtest_main)
+else()
+    message(WARNING GTest is not found; *_tests targets are disabled)
+endif()

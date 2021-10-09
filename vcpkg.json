@@ -4,5 +4,6 @@
   "description": "Generator of direct code scannerless parsers",
   "license": "MIT",
   "dependencies": [
+    "gtest"
   ]
 }

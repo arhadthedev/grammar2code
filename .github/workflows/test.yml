@@ -1,0 +1,27 @@
+name: Test
+on: [pull_request, push]
+jobs:
+  build:
+    name: Build
+    strategy:
+      matrix:
+        os: ['ubuntu', 'windows']
+    runs-on: ${{ matrix.os }}-latest
+    env:
+      build_dir: ./build
+    steps:
+      - name: Checkout a repository
+        uses: actions/checkout@v2
+      - name: Configure a project
+        shell: bash  # To allow $VCPKG_INSTALLATION_ROOT on Windows
+        env:
+          vcpkg_scripts: $VCPKG_INSTALLATION_ROOT/scripts/buildsystems
+        run: >
+          cmake -S . -B "${{ env.build_dir }}"
+          -DCMAKE_BUILD_TYPE=Debug
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.vcpkg_scripts }}/vcpkg.cmake"
+      - name: Build a project
+        run: cmake --build "${{ env.build_dir }}" --target unit_tests
+      - name: Run tests
+        working-directory: ${{ env.build_dir }}
+        run: ctest
