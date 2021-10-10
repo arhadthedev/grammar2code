@@ -10,5 +10,5 @@
 
 TEST(always_pass, sample_test)
 {
-    EXPECT_EQ(1, 1);
+    EXPECT_EQ(0, 1);
 }

@@ -6,19 +6,20 @@ jobs:
     runs-on: ubuntu-latest
     env:
       build_dir: ./build
+      vcpkg_script: $VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake
     steps:
       - name: Checkout a repository
         uses: actions/checkout@v2
       - name: Configure a project
         shell: bash  # To allow $VCPKG_INSTALLATION_ROOT on Windows
-        env:
-          vcpkg_scripts: $VCPKG_INSTALLATION_ROOT/scripts/buildsystems
         run: >
           cmake -S . -B "${{ env.build_dir }}"
           -DCMAKE_BUILD_TYPE=Debug
-          -DCMAKE_TOOLCHAIN_FILE="${{ env.vcpkg_scripts }}/vcpkg.cmake"
+          -DCMAKE_TOOLCHAIN_FILE="${{ env.vcpkg_script }}"
       - name: Build a project
         run: cmake --build "${{ env.build_dir }}" --target unit_tests
       - name: Run tests
         working-directory: ${{ env.build_dir }}
         run: ctest
+
+# Some other content
