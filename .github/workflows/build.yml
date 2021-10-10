@@ -1,4 +1,4 @@
-name: Publish a Build for Public Testing
+name: Make Installers for Public Testing
 on:
   push:
     branches:

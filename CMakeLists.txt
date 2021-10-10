@@ -6,6 +6,7 @@
 # file LICENSE.txt or <https://www.opensource.org/licenses/mit-license.php>.
 
 # cxx_std_17 in CMAKE_CXX_KNOWN_FEATURES was introduced in 3.8
+# find_package(GoogleTest) was introduced in 3.9
 # install(FILES TYPE <type>) was introduced in 3.14
 #
 # New versions of C++ remove unsafe practices from the standard library, so
@@ -27,24 +28,6 @@ file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg.json" MANIFEST ENCODING UTF-8)
 string(REGEX MATCH "[0-9]+\.[0-9.]+" BUILD_VERSION ${MANIFEST})
 
 project(grammar2code VERSION ${BUILD_VERSION} LANGUAGES CXX)
-
-
-##################################################
-#
-# Package dependencies
-#
-##################################################
-
-find_package(GTest CONFIG)
-
-
-##################################################
-#
-# Files managed unprocessed
-#
-##################################################
-
-install(FILES LICENSE.txt README.md TYPE DOC)
 
 
 ##################################################
@@ -76,10 +59,29 @@ add_custom_target(version_info
 #
 ##################################################
 
+find_package(GTest CONFIG)
 if(GTest_FOUND)
+    include(CTest)
+    include(GoogleTest)
+
     add_executable(unit_tests EXCLUDE_FROM_ALL tests/unit/always_pass.cpp)
     target_compile_features(unit_tests PRIVATE cxx_std_17)
     target_link_libraries(unit_tests PRIVATE GTest::gtest GTest::gtest_main)
+    gtest_discover_tests(unit_tests)
 else()
-    message(WARNING GTest is not found; *_tests targets are disabled)
+    message(WARNING GTest is not found; test target is disabled)
 endif()
+
+
+##################################################
+#
+# Installation
+#
+##################################################
+
+set(CPACK_WIX_PRODUCT_GUID ec001051-3486-43e8-8195-44416166b42f)
+set(CPACK_WIX_LICENSE_RTF LICENSE.txt)
+set(CPACK_WIX_PROGRAM_MENU_FOLDER .)  # Create shortcuts directly in Start Menu
+set(CPACK_WIX_PROPERTY_ARPHELPLINK https://github.com/arhadthedev/grammar2code)
+
+install(FILES LICENSE.txt README.md TYPE DOC)
