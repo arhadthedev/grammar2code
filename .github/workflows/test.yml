@@ -22,3 +22,5 @@ jobs:
       - name: Run tests
         working-directory: ${{ env.build_dir }}
         run: ctest
+
+# Some other content
