@@ -61,6 +61,8 @@ add_custom_target(version_info
 
 find_package(GTest CONFIG)
 if(GTest_FOUND)
+    set(BUILD_GMOCK NO)
+    set(INSTALL_GTEST NO)
     include(CTest)
     include(GoogleTest)
 
